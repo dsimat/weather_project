@@ -164,7 +164,7 @@ if __name__ == "__main__":
 
     raw_data = fetch_hourly_metric_data(52.52, 13.41)
     df_hourly = data_in_table(raw_data)
-    print(analyze_data_hourly(df_hourly)[0])  # Print 5 hour DataFrame for testing
+    print(analyze_data_hourly(df_hourly)[1])  # Print 5 hour DataFrame for testing
 
     # raw_data = fetch_daily_data(52.52, 13.41)
     # df_daily = daily_data_table(raw_data)
