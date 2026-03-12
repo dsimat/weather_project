@@ -1,5 +1,6 @@
 import pandas as pd
-from datetime import timedelta, date
+from datetime import datetime, timedelta
+from tzlocal import get_localzone
 
 
 def analyze_data_hourly(
@@ -28,27 +29,32 @@ def analyze_data_hourly(
     # Convert timestamp strings to datetime objects
     df["time"] = pd.to_datetime(df["time"], utc=True)
 
-    today = date.today()
+    local_tz = get_localzone()  # get local timezone
+    now = datetime.now(local_tz)  # get timezone-aware datetime object
+
     hours_5 = timedelta(hours=5)
     days_1 = timedelta(days=1)
 
     # Split archived and forecast data
-    # .dt.date is used to compare only the date part of the timestamp, ignoring the time part
 
     # Future data (forecast) - 3 days ahead
-    df_forecast = df[df["time"].dt.date > today]
+    df_forecast = df[df["time"] > now]
 
     # Past data (archived) - 4 days past
-    df_archive = df[df["time"].dt.date <= today]
+    df_archive = df[df["time"] <= now]
 
-    # From today, go back 5 hours and 1 day
+    # From now, go back 5 hours and 1 day
     # This assumes that the DataFrame is sorted by time in ascending order
-    df_5h = df_archive[
+    mask_5h = (
         df_archive["time"] >= (df_archive.iloc[-1].loc["time"] - hours_5).isoformat()
-    ]
-    df_1d = df_archive[
+    )
+
+    mask_1d = (
         df_archive["time"] >= (df_archive.iloc[-1].loc["time"] - days_1).isoformat()
-    ]
+    )
+
+    df_5h = df_archive[mask_5h]
+    df_1d = df_archive[mask_1d]
 
     # Calculate min, max and average values for the entire DataFrame
     min_data = df.drop("time", axis=1).min()
