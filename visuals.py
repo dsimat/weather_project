@@ -107,19 +107,19 @@ def get_label_value(key: str)-> str:
     """
     values = {
         "temperature_2m": "Temperature",
-        "relative_humidity_2m": "Relative humidity (2 meters)",
+        "relative_humidity_2m": "Relative humidity",#"Relative humidity (2 meters)",
         "precipitation": "Precipitation",
-        "wind_speed_10m": "Wind speed (10 meters/second)",
+        "wind_speed_10m": "Wind speed",#"Wind speed (10 meters/second)",
         "cloud_cover": "Cloud cover",
         "surface_pressure": "Surface Pressure",
-        "wind_direction_10m": "Wind direction (10 meters)",
-        "temperature_2m_min": "Minimum temperature (2 meters)",
-        "temperature_2m_max": "Maximum temperature (2 meters)",
+        "wind_direction_10m": "Wind direction",# (10 meters)",
+        "temperature_2m_min": "Minimum temperature",# (2 meters)",
+        "temperature_2m_max": "Maximum temperature",# (2 meters)",
         "apparent_temperature_mean": "Mean apparent temperature",
         "precipitation_sum": "Precipitation sum",
         "sunshine_duration": "Sunshine duration",
-        "wind_speed_10m_max": "Highest wind speed (10 meters/second)",
-        "wind_direction_10m_dominant": "Dominant wind direction (10 meters)"
+        "wind_speed_10m_max": "Highest wind speed",# (10 meters/second)",
+        "wind_direction_10m_dominant": "Dominant wind direction",# (10 meters)"
     }
     return values[key]
 
@@ -166,11 +166,11 @@ def get_user_duration()-> str:
     user_duration = input("Enter 1/2/3/4/5/6/7:")
     if not user_duration.isdigit() or user_duration == "" or (user_duration.isdigit() and len(user_duration)>1):
         print("Enter only single digits")
-        get_user_duration()
+        user_duration = get_user_duration()
     
     if not user_duration in options:
         print("Not a valid option")
-        get_user_duration()
+        user_duration = get_user_duration()
     return options[user_duration]
 
 def get_user_unit()->str:
@@ -185,11 +185,11 @@ def get_user_unit()->str:
     user_unit = input("Enter 1/2:")
     if not user_unit.isdigit() or user_unit == "" or (user_unit.isdigit() and len(user_unit)>1):
         print("Enter only single digits")
-        get_user_unit()
+        user_unit = get_user_unit()
     
     if not user_unit in options:
         print("Not a valid option")
-        get_user_unit()
+        user_unit = get_user_unit()
     return options[user_unit]
 
 #-------- Functions for user input : End --------
@@ -223,7 +223,8 @@ def get_plot_title_hourly(anlyzd:tuple, duration: str)->tuple:
         plot_title = "Weather forcast for next 3 days"
     return (data_to_plot, plot_title, min_max_mean)
 
-def visuals_plotter_hourly(anlyzd: tuple, duration: str="24hr", unit_sys: str="Metric") -> None:
+# def visuals_plotter_hourly(anlyzd: tuple, duration: str="24hr", unit_sys: str="Metric") -> None:
+def visuals_plotter_hourly(anlyzd: tuple, duration: str, unit_sys:str, unit_used: dict) -> None:
     """
     Creats plot for hourly data
     1. Panel 1: Temperature and humidity
@@ -237,24 +238,26 @@ def visuals_plotter_hourly(anlyzd: tuple, duration: str="24hr", unit_sys: str="M
     data_to_plot, plot_title, min_max_mean = get_plot_title_hourly(anlyzd, duration)
     plot_title += f"({unit_sys})"
 
+    # print(data_to_plot)
     # Panel 1: Temperature and humidity ----------------
 
     # 1.1 Get title value for the dataframe parameter
     temp_label = get_label_value("temperature_2m")
-    temp_postfix = " (\u00b0F)" if unit_sys == "Imperial" else " (\u2103)"
-    temp_label += temp_postfix
+    # temp_postfix = " (\u00b0F)" if unit_sys == "Imperial" else " (\u2103)"
+    temp_lbl_unit = temp_label + f" ({unit_used["temperature_2m"]})"
     humidity_lable = get_label_value("relative_humidity_2m")
+    humidity_lbl_unit = humidity_lable + f" ({unit_used["relative_humidity_2m"]})"
 
     # 1.2 Plot Temperature
-    data_to_plot.plot("time", "temperature_2m", ax = ax1, color = "blue", label = "Temperature")
+    data_to_plot.plot("time", "temperature_2m", ax = ax1, color = "blue", label = temp_label)
     # 1.3 Create a new twin axes sharing the same x axis
     ax1b = ax1.twinx()
     # 1.4 Plot Relative humidity on new axes
-    data_to_plot.plot("time", "relative_humidity_2m", ax = ax1b, color = "red", label = "Relative humidity")
+    data_to_plot.plot("time", "relative_humidity_2m", ax = ax1b, color = "red", label = humidity_lable)
     # 1.5 Add labels
     ax1.set_xlabel("Time")
-    ax1.set_ylabel(temp_label)
-    ax1b.set_ylabel(humidity_lable)
+    ax1.set_ylabel(temp_lbl_unit)
+    ax1b.set_ylabel(humidity_lbl_unit)
     # 1.6 Customize legends
     ax1.legend(loc="upper left", frameon = True, fontsize = LGND_FS)
     ax1b.legend(loc="upper right", frameon = True, fontsize = LGND_FS)
@@ -266,7 +269,11 @@ def visuals_plotter_hourly(anlyzd: tuple, duration: str="24hr", unit_sys: str="M
 
     # 2.1 Get title value
     precip_label = get_label_value("precipitation")
+    precip_lbl_unit = precip_label + f" ({unit_used["precipitation"]})"
     cloud_label = get_label_value("cloud_cover")
+    cloud_lbl_unit = cloud_label + f" ({unit_used["cloud_cover"]})"
+    # precip_label = get_label_value("precipitation")
+    # cloud_label = get_label_value("cloud_cover")
 
     # 2.2 Plot Precipitation
     data_to_plot.plot(
@@ -276,7 +283,7 @@ def visuals_plotter_hourly(anlyzd: tuple, duration: str="24hr", unit_sys: str="M
         color="red",
         kind="line",
         drawstyle="steps-post",
-        label = "Precipitation",
+        label = precip_label,
         linewidth = 2.0
     )
     # 2.3 Create a new twin axes sharing the same x axis
@@ -289,11 +296,11 @@ def visuals_plotter_hourly(anlyzd: tuple, duration: str="24hr", unit_sys: str="M
         color = "green",
         kind = "line",
         drawstyle = "steps-post",
-        label = "Cloud cover"
+        label = cloud_label
     )
     # 2.5 Add labels
-    ax2.set_ylabel(precip_label)
-    ax2b.set_ylabel(cloud_label)
+    ax2.set_ylabel(precip_lbl_unit)
+    ax2b.set_ylabel(cloud_lbl_unit)
     ax2.set_xlabel("Time")
     # 2.6 Customize legends
     ax2.legend(loc="upper left", fontsize = LGND_FS)
@@ -309,6 +316,7 @@ def visuals_plotter_hourly(anlyzd: tuple, duration: str="24hr", unit_sys: str="M
 
     # 3.1 Get title value
     sp_label = get_label_value("surface_pressure")
+    sp_lbl_unit = sp_label + f" ({unit_used["surface_pressure"]})"
     # 3.2 Optional marker only for 5hr and 24hr plotting
     marker_sign = "o" if duration in ("5hr","24hr") else None
     # 3.3 Plot Surface pressure
@@ -323,7 +331,7 @@ def visuals_plotter_hourly(anlyzd: tuple, duration: str="24hr", unit_sys: str="M
         )
     # 3.4 Set labels
     ax3.set_xlabel("Time")
-    ax3.set_ylabel(sp_label)
+    ax3.set_ylabel(sp_lbl_unit)
     # 3.5 Set sub plot title
     ax3.set_title(sp_label, fontsize = SP_FS)
     # 3.6 Customize the legend
@@ -336,22 +344,23 @@ def visuals_plotter_hourly(anlyzd: tuple, duration: str="24hr", unit_sys: str="M
     ax4.set_xticks([])
     ax4.set_yticks([])
 
-    # 4.2 Getting stats for Wind speed
-    stats_text_ws = (f"Wind Speed\n"
+    # 4.2 Get labels
+    # wd_label = get_label_value("wind_direction_10m")
+    ws_label = get_label_value("wind_speed_10m")
+    ws_lbl_unit = ws_label + f"\n({unit_used["wind_speed_10m"]})"
+
+    # 4.3 Getting stats for Wind speed
+    stats_text_ws = (f"{ws_lbl_unit}\n"
               f"Min: {min_max_mean["wind_speed_10m"]["min"]:.1f}\n"
               f"Max: {min_max_mean["wind_speed_10m"]["max"]:.1f}\n"
               f"Avg: {min_max_mean["wind_speed_10m"]["avg"]:.1f}")
     
-    # 4.3 Add text to show min, max and avg values
+    # 4.4 Add text to show min, max and avg values
     ax4.text(0.05, 0.85, stats_text_ws, 
          transform=ax4.transAxes, 
          fontsize=10, 
          verticalalignment="top",
          bbox=dict(boxstyle="round", facecolor="white", alpha=0.5))
-
-    # 4.4 Get labels
-    wd_label = get_label_value("wind_direction_10m")
-    ws_label = get_label_value("wind_speed_10m")
     
     # 4.5 Wind direction as angles
     angles = np.deg2rad(data_to_plot["wind_direction_10m"])
@@ -376,12 +385,13 @@ def visuals_plotter_hourly(anlyzd: tuple, duration: str="24hr", unit_sys: str="M
 
     # 4.11 Set the figure title
     fig.suptitle(plot_title, fontsize = FT_FS, fontweight = "bold")
-    plt.grid(True)
+    plt.grid(True)#to check
     plt.tight_layout()
     plt.show()
 
 
-def visuals_plotter_daily(anlyzd: pd.DataFrame, duration: str = "1m", unit_sys: str = "Metric")-> None:
+# def visuals_plotter_daily(anlyzd: pd.DataFrame, duration: str = "1m", unit_sys: str = "Metric")-> None:
+def visuals_plotter_daily(anlyzd: pd.DataFrame, duration: str, unit_sys:str, unit_used: dict)-> None:
     """
     Creats plot for Daily data
     1. Panel 1: Temperature: temperature_2m_max, temperature_2m_min, apparent_temperature_mean
@@ -426,8 +436,9 @@ def visuals_plotter_daily(anlyzd: pd.DataFrame, duration: str = "1m", unit_sys: 
     # 1.4 Set labels
     # ax1.set_xlabel("Days")
     temp_label = "Temperature"
-    temp_postfix = " (\u00b0F)" if unit_sys == "Imperial" else " (\u2103)"
-    ax1.set_ylabel(temp_label+temp_postfix)
+    temp_label_unit = f"Temperature({unit_used["temperature_2m_max"]})"
+    # temp_postfix = " (\u00b0F)" if unit_sys == "Imperial" else " (\u2103)"
+    ax1.set_ylabel(temp_label_unit)
     # 1.5 Set sub plot title
     ax1.set_title(temp_label, fontsize = SP_FS)
 
@@ -441,10 +452,12 @@ def visuals_plotter_daily(anlyzd: pd.DataFrame, duration: str = "1m", unit_sys: 
         label = "Precipitation"
     )
     # 2.2 Set labels
+    precip_label = "Precipitation sum"
+    precip_lbl_unit = precip_label + "("+unit_used["precipitation_sum"]+ ")"
     # ax2.set_xlabel("Days")
-    ax2.set_ylabel("Precipitation sum")
+    ax2.set_ylabel(precip_lbl_unit)
     # 2.3 Set sub plot title
-    ax2.set_title("Precipitation", fontsize = SP_FS)
+    ax2.set_title(precip_label, fontsize = SP_FS)
     # 2.4 Customize legend
     ax2.legend(loc = "upper left", frameon = True, fontsize = LGND_FS)
 
@@ -452,6 +465,7 @@ def visuals_plotter_daily(anlyzd: pd.DataFrame, duration: str = "1m", unit_sys: 
     # type: bar
     # 3.1 Get title value
     ss_label = get_label_value("sunshine_duration")
+    ss_lbl_unit = ss_label + "(" + unit_used["sunshine_duration"] + ")"
     # 3.2 Plot sunshine_duration
     ax3.plot(
         data_to_plot["time"],
@@ -461,7 +475,7 @@ def visuals_plotter_daily(anlyzd: pd.DataFrame, duration: str = "1m", unit_sys: 
     )
     # 3.3 Set labels
     # ax3.set_xlabel("Days")
-    ax3.set_ylabel(ss_label)
+    ax3.set_ylabel(ss_lbl_unit)
     # 3.4 Get title value
     ax3.set_title(ss_label, fontsize = SP_FS)
 
@@ -472,22 +486,26 @@ def visuals_plotter_daily(anlyzd: pd.DataFrame, duration: str = "1m", unit_sys: 
     ax4.set_xticks([])
     ax4.set_yticks([])
 
-    # 4.2 Getting stats for Wind speed
-    stats_text_ws = (f"Wind Speed\n"
+    # 4.2 Get labels
+    # wd_label = get_label_value("wind_direction_10m_dominant")
+    # ws_label = get_label_value("wind_speed_10m_max")
+
+    # 4.3 Getting stats for Wind speed
+    ws_label = get_label_value("wind_speed_10m_max")
+    ws_lbl_unit = ws_label + f"\n({unit_used["wind_speed_10m_max"]})"
+    stats_text_ws = (f"{ws_lbl_unit}\n"
               f"Min: {min_max_mean["wind_speed_10m_max"]["min"]:.1f}\n"
               f"Max: {min_max_mean["wind_speed_10m_max"]["max"]:.1f}\n"
               f"Avg: {min_max_mean["wind_speed_10m_max"]["avg"]:.1f}")
     
-    # 4.3 Add text to show min, max and avg values
-    ax4.text(0.05, 0.85, stats_text_ws, 
+    # 4.4 Add text to show min, max and avg values
+    ax4.text(.01, 0.85, stats_text_ws, 
          transform=ax4.transAxes, 
          fontsize=10, 
          verticalalignment="top",
-         bbox=dict(boxstyle="round", facecolor="white", alpha=0.5))
-    
-    # 4.4 Get labels
-    # wd_label = get_label_value("wind_direction_10m_dominant")
-    # ws_label = get_label_value("wind_speed_10m_max")
+         bbox=dict(boxstyle="round", facecolor="white", alpha=0.5),
+         horizontalalignment="left"
+         )
     
     # 4.5 Wind direction as angles
     angles = data_to_plot["wind_direction_10m_dominant"]
@@ -532,13 +550,18 @@ def visualize_weather(coords: tuple, duration: str, unit_sys: str):
         # Check if unit is ISO or Imperial
         if unit_sys == "Metric":
             raw_data = fetch_hourly_metric_data(coords[0], coords[1])
+            # print(hourly_data_units(raw_data))# to delete
+            units_used = hourly_data_units(raw_data)
+
         else:
             raw_data = hourly_imperial_data(coords[0], coords[1])
+            units_used = hourly_data_units(raw_data)
         df_hourly = data_in_table(raw_data)
         hr_anls_df = analyze_data_hourly(df_hourly)
 
         #Visualize the hourly data
-        visuals_plotter_hourly(hr_anls_df, duration, unit_sys)
+        # visuals_plotter_hourly(hr_anls_df, duration, unit_sys)
+        visuals_plotter_hourly(hr_anls_df, duration, unit_sys, units_used)
     else:# the data is daily
         max_past = 90
         start = date.today()-timedelta(days= max_past)
@@ -546,13 +569,17 @@ def visualize_weather(coords: tuple, duration: str, unit_sys: str):
 
         if unit_sys == "Metric":
             raw_data = fetch_daily_data(coords[0], coords[1], from_date = start, to_date = end)
+            # print(daily_data_units(raw_data))# to delete
+            units_used = daily_data_units(raw_data)
         else:
             raw_data = raw_daily_data_imperial(coords[0], coords[1], from_date = start, to_date = end)
+            units_used = daily_data_units(raw_data)
 
         df_daily = daily_data_table(raw_data)
         daily_anlyzd = analyze_data_daily(df_daily, max_past)
 
-        visuals_plotter_daily(daily_anlyzd, duration, unit_sys)
+        # visuals_plotter_daily(daily_anlyzd, duration, unit_sys)
+        visuals_plotter_daily(daily_anlyzd, duration, unit_sys, units_used)
 
 def get_user_input()-> tuple:
     """
@@ -625,7 +652,9 @@ if __name__ == "__main__":
         data_in_table,
         fetch_daily_data,
         raw_daily_data_imperial,
-        daily_data_table
+        daily_data_table,
+        hourly_data_units,
+        daily_data_units
     )
     from analysis import (
         analyze_data_daily,
@@ -637,3 +666,5 @@ if __name__ == "__main__":
 
     #Visualize
     visualize_weather(city_coords, user_duration, user_unit)
+
+    
