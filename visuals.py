@@ -550,7 +550,7 @@ def visualize_weather(coords: tuple, duration: str, unit_sys: str):
         # Check if unit is ISO or Imperial
         if unit_sys == "Metric":
             raw_data = fetch_hourly_metric_data(coords[0], coords[1])
-            print(hourly_data_units(raw_data))# to delete
+            # print(hourly_data_units(raw_data))# to delete
             units_used = hourly_data_units(raw_data)
 
         else:
@@ -569,7 +569,7 @@ def visualize_weather(coords: tuple, duration: str, unit_sys: str):
 
         if unit_sys == "Metric":
             raw_data = fetch_daily_data(coords[0], coords[1], from_date = start, to_date = end)
-            print(daily_data_units(raw_data))# to delete
+            # print(daily_data_units(raw_data))# to delete
             units_used = daily_data_units(raw_data)
         else:
             raw_data = raw_daily_data_imperial(coords[0], coords[1], from_date = start, to_date = end)
