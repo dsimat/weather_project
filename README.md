@@ -17,17 +17,17 @@ python3 -m venv venv
 
 4. Activate the virtual environment:
 
-**macOS / Linux**
+- **macOS / Linux**
 ```
 source venv/bin/activate
 ```
 
-**Windows (PowerShell)**
+- **Windows (PowerShell)**
 ```
 .\venv\Scripts\Activate.ps1
 ```
 
-**Windows (Command Prompt / cmd)**
+- **Windows (Command Prompt / cmd)**
 ```
 .\venv\Scripts\activate.bat
 ```
