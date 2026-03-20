@@ -15,7 +15,8 @@ The program can plot in both Metric and Imperial units.
 python3 -m venv venv
 ```
 
-4. Activate the virtual environment: 
+4. Activate the virtual environment:
+
 **macOS / Linux**
 ```
 source venv/bin/activate
@@ -31,7 +32,7 @@ source venv/bin/activate
 .\venv\Scripts\activate.bat
 ```
 
-5. Install dependencies
+1. Install dependencies
 ```
 pip install -r requirements.txt
 ```
