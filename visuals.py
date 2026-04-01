@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import date, timedelta
 import numpy as np
+import matplotlib.ticker as ticker
 
 from data_processing import (
     fetch_hourly_metric_data,
@@ -248,6 +249,15 @@ class Visuals:
 
         # 4.11 Set the figure title
         fig.suptitle(plot_title, fontsize = FT_FS, fontweight = "bold")
+
+        # 4.12 Hide x axis label and add customized labels for 5 hour plot
+        if self.duration == "5hr":
+            labels = ["5hr ago", "4hr ago", "3hr ago", "2hr ago", "1hr ago", "Now"]
+            for ax in [ax1, ax2, ax3]:
+                ax.set_xticks([])
+                ax.xaxis.set_major_locator(ticker.MaxNLocator(nbins=6)) 
+                ax.set_xticklabels(labels)
+
         plt.grid(True)#to check
         plt.tight_layout()
         plt.show()
