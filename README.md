@@ -1,10 +1,9 @@
 # Weather Analyzer
 
-This program fetches weather data from [Open-Meteo](https://open-meteo.com/) and plots them. It can plot today's weather, archived weather data from the past 5 hours, 4 days, 1 month, 2 months and 3 months, as well as forecast data for the next 3 days. It plots temperature, humidity, precipitation, cloud cover, surface pressure, wind speed, and wind direction.
+## Description
+This program fetches weather data from [Open-Meteo](https://open-meteo.com/) and plots them. It can plot today's weather, archived weather data from the past 5 hours, 4 days, 1 month, 2 months and 3 months, as well as forecast data for the next 3 days. The program can plot in both Metric and Imperial units. It plots temperature, humidity, precipitation, cloud cover, surface pressure, wind speed, and wind direction.
 
-The program can plot in both Metric and Imperial units.
-
-<img src="./img/5_hours_metric.png" alt="5_hours_metric" height="800">
+The Open-Meteo API by default [differentiates between hourly and daily data](https://open-meteo.com/en/docs), and our program follows the same convention. The parameters plotted for hourly and daily weather data are slightly different. Hourly data parameters include
 
 ## Installation
 
@@ -38,7 +37,19 @@ pip install -r requirements.txt
 ```
 
 ## Running the program
-1. Run `visuals.py`
+1. Run `weather_main.py`
 2. Enter the city and country names
 3. Enter the duration
 4. Enter the units
+
+## Examples
+
+### Hourly data
+
+Weather in Kota, India in the last 5 hours in Metric units:
+
+<img src="./img/5_hours_metric.png" alt="5_hours_metric" height="800">
+
+Weather in Kota, India in the last month in Imperial units:
+
+<img src="./img/1_month_imperial.png" alt="1_month_imperial" height="800">
