@@ -12,7 +12,6 @@ Hourly data parameters include:
 - Cloud cover
 - Surface pressure
 - Wind speed and direction
-- 
 
 Daily data parameters include:
 - Temperature (max, min and mean over time)
