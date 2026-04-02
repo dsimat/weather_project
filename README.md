@@ -60,7 +60,7 @@ pip install -r requirements.txt
 
 ### Hourly data
 
-Weather in Kota, India in the last 5 hours in Metric units:
+Weather in Athens, Greece in the last 5 hours in Metric units:
 
 <img src="./img/5_hours_metric.png" alt="5_hours_metric" height="800">
 
