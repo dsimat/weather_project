@@ -1,0 +1,74 @@
+import pytest
+import json
+import pandas as pd
+from pathlib import Path
+from analysis import analyze_data_hourly, analyze_data_daily
+
+
+@pytest.fixture
+def filepath():
+    return Path(__file__).parent
+
+
+@pytest.fixture
+def sample_hourly_metric_data(filepath):
+    hourly_metric_data = json.load(
+        open(f"{filepath}/mock_data/tabular_hourly_metric.json")
+    )
+    return pd.DataFrame(hourly_metric_data)
+
+
+@pytest.fixture
+def sample_hourly_imperial_data(filepath):
+    hourly_imperial_data = json.load(
+        open(f"{filepath}/mock_data/tabular_hourly_imperial.json")
+    )
+    return pd.DataFrame(hourly_imperial_data)
+
+
+@pytest.fixture
+def sample_daily_metric_data(filepath):
+    daily_metric_data = json.load(
+        open(f"{filepath}/mock_data/tabular_daily_metric.json")
+    )
+    return pd.DataFrame(daily_metric_data)
+
+
+@pytest.fixture
+def sample_daily_imperial_data(filepath):
+    daily_imperial_data = json.load(
+        open(f"{filepath}/mock_data/tabular_daily_imperial.json")
+    )
+    return pd.DataFrame(daily_imperial_data)
+
+
+@pytest.fixture
+def analyzed_hourly_data(sample_hourly_metric_data):
+    return analyze_data_hourly(sample_hourly_metric_data)
+
+
+@pytest.fixture
+def analyzed_daily_data(sample_daily_metric_data):
+    return analyze_data_daily(sample_daily_metric_data)
+
+
+def test_instance_of_dataFrames(analyzed_hourly_data, analyzed_daily_data):
+
+    for index, df in enumerate(analyzed_hourly_data):
+        assert isinstance(df, pd.DataFrame), (
+            f"Element at index {index} is not a DataFrame"
+        )
+
+    for index, df in enumerate(analyzed_daily_data):
+        assert isinstance(df, pd.DataFrame), (
+            f"Element at index {index} is not a DataFrame"
+        )
+
+
+def test_non_empty_dataFrames(analyzed_hourly_data, analyzed_daily_data):
+
+    for df in analyzed_hourly_data:
+        assert not df.empty
+
+    for df in analyzed_daily_data:
+        assert not df.empty
