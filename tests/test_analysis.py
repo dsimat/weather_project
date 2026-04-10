@@ -8,55 +8,55 @@ from analysis import analyze_data_hourly, analyze_data_daily
 @pytest.fixture
 def filepath():
     """Fixture to provide the file path for the test data."""
-    yield Path(__file__).parent
+    return Path(__file__).parent
 
 
 @pytest.fixture
 def sample_hourly_metric_data(filepath: Path):
-    """Fixture to load the sample hourly metric data from a JSON file and yield it as a DataFrame."""
+    """Fixture to load the sample hourly metric data from a JSON file and return it as a DataFrame."""
     hourly_metric_data = json.load(
         open(f"{filepath}/mock_data/tabular_hourly_metric.json")
     )
-    yield pd.DataFrame(hourly_metric_data)
+    return pd.DataFrame(hourly_metric_data)
 
 
 @pytest.fixture
 def sample_hourly_imperial_data(filepath: Path):
-    """Fixture to load the sample hourly imperial data from a JSON file and yield it as a DataFrame."""
+    """Fixture to load the sample hourly imperial data from a JSON file and return it as a DataFrame."""
     hourly_imperial_data = json.load(
         open(f"{filepath}/mock_data/tabular_hourly_imperial.json")
     )
-    yield pd.DataFrame(hourly_imperial_data)
+    return pd.DataFrame(hourly_imperial_data)
 
 
 @pytest.fixture
 def sample_daily_metric_data(filepath: Path):
-    """Fixture to load the sample daily metric data from a JSON file and yield it as a DataFrame."""
+    """Fixture to load the sample daily metric data from a JSON file and return it as a DataFrame."""
     daily_metric_data = json.load(
         open(f"{filepath}/mock_data/tabular_daily_metric.json")
     )
-    yield pd.DataFrame(daily_metric_data)
+    return pd.DataFrame(daily_metric_data)
 
 
 @pytest.fixture
 def sample_daily_imperial_data(filepath: Path):
-    """Fixture to load the sample daily imperial data from a JSON file and yield it as a DataFrame."""
+    """Fixture to load the sample daily imperial data from a JSON file and return it as a DataFrame."""
     daily_imperial_data = json.load(
         open(f"{filepath}/mock_data/tabular_daily_imperial.json")
     )
-    yield pd.DataFrame(daily_imperial_data)
+    return pd.DataFrame(daily_imperial_data)
 
 
 @pytest.fixture
 def analyzed_hourly_data(sample_hourly_metric_data):
-    """Fixture to analyze the sample hourly metric data and yield the results."""
-    yield analyze_data_hourly(sample_hourly_metric_data)
+    """Fixture to analyze the sample hourly metric data and return the results."""
+    return analyze_data_hourly(sample_hourly_metric_data)
 
 
 @pytest.fixture
 def analyzed_daily_data(sample_daily_metric_data):
-    """Fixture to analyze the sample daily metric data and yield the results."""
-    yield analyze_data_daily(sample_daily_metric_data)
+    """Fixture to analyze the sample daily metric data and return the results."""
+    return analyze_data_daily(sample_daily_metric_data)
 
 
 def test_instance_of_dataFrames(
