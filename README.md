@@ -3,9 +3,9 @@
 ## Description
 This program fetches weather data from [Open-Meteo](https://open-meteo.com/) and plots them. It can plot today's weather, archived weather data from the past 5 hours, 4 days, 1 month, 2 months and 3 months, as well as forecast data for the next 3 days. The program can plot in both Metric and Imperial units.
 
-The Open-Meteo API [fetches different parameters for hourly and daily weather data](https://open-meteo.com/en/docs), and our program follows the same convention. The parameters plotted for hourly and daily weather data are slightly different.
+Note that the Open-Meteo API [returns different parameters for hourly and daily weather data](https://open-meteo.com/en/docs).
 
-Hourly data parameters include:
+Hourly data parameters:
 - Temperature
 - Humidity
 - Precipitation
@@ -13,7 +13,7 @@ Hourly data parameters include:
 - Surface pressure
 - Wind speed and direction
 
-Daily data parameters include:
+Daily data parameters:
 - Temperature (max, min and mean over time)
 - Precipitation sum
 - Sunshine duration
