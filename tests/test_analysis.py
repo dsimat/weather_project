@@ -12,7 +12,7 @@ def filepath():
 
 
 @pytest.fixture
-def sample_hourly_metric_data(filepath):
+def sample_hourly_metric_data(filepath: Path):
     """Fixture to load the sample hourly metric data from a JSON file and yield it as a DataFrame."""
     hourly_metric_data = json.load(
         open(f"{filepath}/mock_data/tabular_hourly_metric.json")
@@ -21,7 +21,7 @@ def sample_hourly_metric_data(filepath):
 
 
 @pytest.fixture
-def sample_hourly_imperial_data(filepath):
+def sample_hourly_imperial_data(filepath: Path):
     """Fixture to load the sample hourly imperial data from a JSON file and yield it as a DataFrame."""
     hourly_imperial_data = json.load(
         open(f"{filepath}/mock_data/tabular_hourly_imperial.json")
@@ -30,7 +30,7 @@ def sample_hourly_imperial_data(filepath):
 
 
 @pytest.fixture
-def sample_daily_metric_data(filepath):
+def sample_daily_metric_data(filepath: Path):
     """Fixture to load the sample daily metric data from a JSON file and yield it as a DataFrame."""
     daily_metric_data = json.load(
         open(f"{filepath}/mock_data/tabular_daily_metric.json")
@@ -39,7 +39,7 @@ def sample_daily_metric_data(filepath):
 
 
 @pytest.fixture
-def sample_daily_imperial_data(filepath):
+def sample_daily_imperial_data(filepath: Path):
     """Fixture to load the sample daily imperial data from a JSON file and yield it as a DataFrame."""
     daily_imperial_data = json.load(
         open(f"{filepath}/mock_data/tabular_daily_imperial.json")
@@ -59,7 +59,9 @@ def analyzed_daily_data(sample_daily_metric_data):
     yield analyze_data_daily(sample_daily_metric_data)
 
 
-def test_instance_of_dataFrames(analyzed_hourly_data, analyzed_daily_data):
+def test_instance_of_dataFrames(
+    analyzed_hourly_data: tuple[pd.DataFrame], analyzed_daily_data: tuple[pd.DataFrame]
+) -> None:
     """Test that the outputs of the analysis functions are DataFrames."""
 
     for index, df in enumerate(analyzed_hourly_data):
@@ -73,7 +75,9 @@ def test_instance_of_dataFrames(analyzed_hourly_data, analyzed_daily_data):
         )
 
 
-def test_non_empty_dataFrames(analyzed_hourly_data, analyzed_daily_data):
+def test_non_empty_dataFrames(
+    analyzed_hourly_data: tuple[pd.DataFrame], analyzed_daily_data: tuple[pd.DataFrame]
+) -> None:
     """Test that the DataFrames returned by the analysis functions are not empty."""
 
     for df in analyzed_hourly_data:
