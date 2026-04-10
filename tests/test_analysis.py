@@ -59,17 +59,18 @@ def analyzed_daily_data(sample_daily_metric_data):
     return analyze_data_daily(sample_daily_metric_data)
 
 
+@pytest.mark.parametrize(
+    "fixture_name",
+    ["analyzed_hourly_data", "analyzed_daily_data"],
+)
 def test_instance_of_dataFrames(
-    analyzed_hourly_data: tuple[pd.DataFrame], analyzed_daily_data: tuple[pd.DataFrame]
+    fixture_name: str, request: pytest.FixtureRequest
 ) -> None:
     """Test that the outputs of the analysis functions are DataFrames."""
 
-    for index, df in enumerate(analyzed_hourly_data):
-        assert isinstance(df, pd.DataFrame), (
-            f"Element at index {index} is not a DataFrame"
-        )
+    analyzed_data = request.getfixturevalue(fixture_name)
 
-    for index, df in enumerate(analyzed_daily_data):
+    for index, df in enumerate(analyzed_data):
         assert isinstance(df, pd.DataFrame), (
             f"Element at index {index} is not a DataFrame"
         )
