@@ -116,6 +116,8 @@ def test_instance_of_dataFrames_3(
 
 # Test with parametrization to avoid code duplication
 # Note: This uses indirect parametrization
+# The analyzed_data fixture will be called with the values from the parametrize decorator
+# It will retrieve the corresponding fixture value based on the parameter value and pass it to the test function.
 @pytest.fixture
 def analyzed_data(request) -> tuple[pd.DataFrame, ...]:
     return request.getfixturevalue(request.param)
