@@ -12,8 +12,8 @@ def filepath():
 
 
 @pytest.fixture
-def sample_hourly_metric_data(filepath: Path):
-    """Fixture to load the sample hourly metric data from a JSON file and return it as a DataFrame."""
+def mock_hourly_metric_data(filepath: Path):
+    """Fixture to load the mock hourly metric data from a JSON file and return it as a DataFrame."""
     hourly_metric_data = json.load(
         open(f"{filepath}/mock_data/tabular_hourly_metric.json")
     )
@@ -21,8 +21,8 @@ def sample_hourly_metric_data(filepath: Path):
 
 
 @pytest.fixture
-def sample_hourly_imperial_data(filepath: Path):
-    """Fixture to load the sample hourly imperial data from a JSON file and return it as a DataFrame."""
+def mock_hourly_imperial_data(filepath: Path):
+    """Fixture to load the mock hourly imperial data from a JSON file and return it as a DataFrame."""
     hourly_imperial_data = json.load(
         open(f"{filepath}/mock_data/tabular_hourly_imperial.json")
     )
@@ -30,8 +30,8 @@ def sample_hourly_imperial_data(filepath: Path):
 
 
 @pytest.fixture
-def sample_daily_metric_data(filepath: Path):
-    """Fixture to load the sample daily metric data from a JSON file and return it as a DataFrame."""
+def mock_daily_metric_data(filepath: Path):
+    """Fixture to load the mock daily metric data from a JSON file and return it as a DataFrame."""
     daily_metric_data = json.load(
         open(f"{filepath}/mock_data/tabular_daily_metric.json")
     )
@@ -39,8 +39,8 @@ def sample_daily_metric_data(filepath: Path):
 
 
 @pytest.fixture
-def sample_daily_imperial_data(filepath: Path):
-    """Fixture to load the sample daily imperial data from a JSON file and return it as a DataFrame."""
+def mock_daily_imperial_data(filepath: Path):
+    """Fixture to load the mock daily imperial data from a JSON file and return it as a DataFrame."""
     daily_imperial_data = json.load(
         open(f"{filepath}/mock_data/tabular_daily_imperial.json")
     )
@@ -48,15 +48,15 @@ def sample_daily_imperial_data(filepath: Path):
 
 
 @pytest.fixture
-def analyzed_hourly_data(sample_hourly_metric_data):
-    """Fixture to analyze the sample hourly metric data and return the results."""
-    return analyze_data_hourly(sample_hourly_metric_data)
+def analyzed_hourly_data(mock_hourly_metric_data):
+    """Fixture to analyze the mock hourly metric data and return the results."""
+    return analyze_data_hourly(mock_hourly_metric_data)
 
 
 @pytest.fixture
-def analyzed_daily_data(sample_daily_metric_data):
-    """Fixture to analyze the sample daily metric data and return the results."""
-    return analyze_data_daily(sample_daily_metric_data)
+def analyzed_daily_data(mock_daily_metric_data):
+    """Fixture to analyze the mock daily metric data and return the results."""
+    return analyze_data_daily(mock_daily_metric_data)
 
 
 # Test without parametrization
