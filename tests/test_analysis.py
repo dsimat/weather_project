@@ -116,17 +116,19 @@ def test_instance_of_dataFrames_3(
 
 # Test with parametrization to avoid code duplication
 # Note: This uses indirect parametrization
-@pytest.mark.parametrize(
-    "fixture_name",
-    ["analyzed_hourly_data", "analyzed_daily_data"],
-)
-def test_instance_of_dataFrames_4(
-    fixture_name: str, request: pytest.FixtureRequest
-) -> None:
-    """Test that the outputs of the analysis functions are DataFrames."""
+@pytest.fixture
+def analyzed_data(request) -> tuple[pd.DataFrame, ...]:
+    return request.getfixturevalue(request.param)
 
-    # Get the analyzed data from the fixture
-    analyzed_data = request.getfixturevalue(fixture_name)
+
+@pytest.mark.parametrize(
+    "analyzed_data",
+    ["analyzed_hourly_data", "analyzed_daily_data"],
+    indirect=True,
+    ids=["hourly", "daily"],
+)
+def test_instance_of_dataFrames_4(analyzed_data: tuple[pd.DataFrame, ...]) -> None:
+    """Test that the outputs of the analysis functions are DataFrames."""
 
     for index, df in enumerate(analyzed_data):
         assert isinstance(df, pd.DataFrame), (
